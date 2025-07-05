@@ -1,0 +1,159 @@
+CREATE TABLE employee(
+	Education TEXT,
+	JoiningYear INT,
+	City TEXT,
+	PaymentTier INT,
+	Age INT,
+	Gender TEXT,
+	EverBenched BOOLEAN,
+	ExperienceInCurrentDomain INT,
+	LeaveOrNot BOOLEAN
+)
+
+SELECT * 
+FROM employee
+
+
+SELECT education, AVG(age) as avarage_age
+FROM employee
+GROUP BY education
+;
+
+SELECT *
+FROM employee
+WHERE education ='Bachelors'
+AND gender = 'Male'
+AND ExperienceInCurrentDomain > 1
+ORDER BY ExperienceInCurrentDomain DESC;
+
+
+
+SELECT education, COUNT(*) AS total_stayed
+FROM employee
+WHERE leaveornot = true
+GROUP BY education;
+
+
+SELECT education, COUNT(*) AS leaving_employee
+FROM employee
+GROUP BY education;
+
+
+SELECT joiningyear, COUNT(*) AS bachelors_joined
+FROM employee
+WHERE education = 'Bachelors'
+GROUP BY joiningyear
+ORDER BY joiningyear ASC;
+
+SELECT education, COUNT(*)
+FROM employee
+WHERE age <= 30
+AND leaveornot = true
+GROUP BY education
+
+SELECT education,joiningyear, COUNT(*) AS tier_1_employees
+FROM employee
+WHERE paymenttier = 1
+GROUP BY education,joiningyear
+ORDER BY joiningyear ASC
+
+SELECT education,joiningyear, COUNT(*) AS tier_1_employees
+FROM employee
+WHERE paymenttier = 1
+AND leaveornot = true
+AND everbenched = true
+GROUP BY education,joiningyear
+ORDER BY joiningyear ASC
+
+SELECT education,COUNT(*) as left_with_more_experience
+FROM employee
+WHERE experienceincurrentdomain >=5
+AND paymenttier = 3
+AND leaveornot = true
+GROUP BY education
+
+SELECT education,COUNT(*) as most_experienced
+FROM employee
+WHERE experienceincurrentdomain >= 5
+AND paymenttier = 1
+GROUP BY education
+
+
+SELECT city,education,gender,COUNT(*) AS total_bachelors_per_city
+FROM employee
+WHERE education = 'Bachelors'
+GROUP BY city,education,gender
+
+SELECT education,gender, MAX(age),MIN(age)
+from employee
+group by education,gender
+
+
+SELECT education, COUNT(*) AS employee_per_education
+FROM employee
+GROUP BY education
+
+SELECT education, STRING_AGG(city, ', ') AS cities
+FROM employee
+GROUP BY education;
+
+SELECT education, COUNT(*) AS total, COUNT(*) FILTER (WHERE leaveornot) AS total_left,COUNT(*) FILTER (WHERE leaveornot = false) AS total_stayed
+FROM employee
+GROUP BY education;
+
+SELECT education, COUNT(*) FILTER (WHERE age >30) as above_30, COUNT(*) FILTER (WHERE age<=30) as below_30
+FROM employee
+WHERE leaveornot = false
+GROUP BY education 
+
+SELECT education, COUNT(*) FILTER (WHERE everbenched) as ever_benched
+FROM employee
+WHERE leaveornot = true
+GROUP BY education 
+
+SELECT education, COUNT(*) FILTER (WHERE everbenched = false) as never_benched
+FROM employee
+WHERE leaveornot = true
+GROUP BY education 
+
+select joiningyear,COUNT(*) FILTER (WHERE education = 'Bachelors') AS Bachelors_joining_each_year
+from employee
+group by joiningyear
+ORDER BY joiningyear ASC
+
+select joiningyear,COUNT(*) FILTER (WHERE education = 'PHD') AS PHD_joining_each_year
+from employee
+group by joiningyear
+ORDER BY joiningyear ASC
+
+select joiningyear,COUNT(*) FILTER (WHERE education = 'Masters') AS Masters_joining_each_year
+from employee
+group by joiningyear
+ORDER BY joiningyear ASC
+
+SELECT *
+FROM employee
+LIMIT 5
+
+
+SELECT city, COUNT(*) as Total_employee_per_city,COUNT(*) FILTER(WHERE education = 'Bachelors') AS bachelors_per_city,COUNT(*) FILTER(WHERE education = 'PHD') AS phd_per_city,COUNT(*) FILTER(WHERE education = 'Masters') AS masters_per_city
+FROM employee
+GROUP BY city
+
+SELECT city
+from employee
+GROUP BY  city
+
+
+SELECT gender, COUNT(*) AS number_per_gender, COUNT(*) FILTER (WHERE city= 'Pune') AS pune_gender_number,COUNT(*) FILTER (WHERE city= 'Bangalore') AS Bangalore_gender_number,COUNT(*) FILTER (WHERE city= 'New Delhi') AS NewDelhi_gender_number
+from employee
+GROUP BY  gender
+
+SELECT education, COUNT(*) AS number_per_paymenttier, COUNT(*) FILTER (WHERE paymenttier = 1) AS paymenttier1_employees,COUNT(*) FILTER (WHERE paymenttier = 2) AS paymenttier2_employees,COUNT(*) FILTER (WHERE paymenttier = 3) AS paymenttier3_employees
+FROM employee
+GROUP BY education 
+
+
+
+
+
